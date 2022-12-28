@@ -9,6 +9,8 @@ TagManager:
   - Chest
   - Tramp
   - Uuga
+  - Wind
+  - Campfire
   layers:
   - Default
   - TransparentFX
