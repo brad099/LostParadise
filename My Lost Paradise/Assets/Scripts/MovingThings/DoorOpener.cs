@@ -4,20 +4,16 @@ using UnityEngine;
 using DG.Tweening;
 public class DoorOpener : MonoBehaviour
 {
-    [SerializeField]GameObject Door;
-    [SerializeField]bool isOpened;
+    [SerializeField] GameObject Door;
 
-
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerStay(Collider other)
     {
-            isOpened = true;
-            Door.SetActive(true);
-        
+        Door.SetActive(false);
+
     }
 
-    private void OnTriggerExit(Collider other) 
+    private void OnTriggerExit(Collider other)
     {
-            isOpened = false;
-            Door.SetActive(false);
+        Door.SetActive(true);
     }
 }
