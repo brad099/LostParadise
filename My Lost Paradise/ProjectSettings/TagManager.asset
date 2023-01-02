@@ -11,6 +11,8 @@ TagManager:
   - Uuga
   - Wind
   - Campfire
+  - ChestOpened
+  - Weight
   layers:
   - Default
   - TransparentFX

@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float AttackRate;
     [SerializeField] public float AttackSecond;
     [SerializeField] public GameObject RestartLevel;
-    [SerializeField] int CandyCount = 0;
     private bool _IsDead = false;
     public bool _isGround = true;
     public GameObject endingmenu;
@@ -26,8 +25,6 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem particlewalk;
     private CinemachineVirtualCamera _cinemachineCamera;
     private CinemachineTransposer _transposer;
-    public Text candytext;
-    public Text Elxyrtext;
     public float TurnSpeed;
     public float Jspeed = 300f;
     Vector3 movement;
@@ -40,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        transform.position = ESDataManager.Instance.GetLastCheckPoint();
         particlewalk = GetComponentInChildren<ParticleSystem>();
         walking = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
@@ -50,15 +48,11 @@ public class PlayerController : MonoBehaviour
         // Awakening
         Speed = 0;
         RotationSpeed = 0;
+        JumpForce = 0;
         StartCoroutine("StartGame");
     }
     void Update()
     {
-        //Start Animation Wake Up
-        // if (Input.GetKeyDown(KeyCode.Q))
-        // {
-
-        // }
         // Jumping
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -94,6 +88,8 @@ public class PlayerController : MonoBehaviour
         return targetVector;
     }
 
+
+
     // Finish Line
     public void OnTriggerStay(Collider other)
     {
@@ -109,8 +105,6 @@ public class PlayerController : MonoBehaviour
             walking.enabled = false;
             particlewalk.Stop(true);
             endingmenu.SetActive(true);
-            candytext.gameObject.SetActive(false);
-            Elxyrtext.gameObject.SetActive(false);
         }
     }
     // Checking enemy
@@ -139,11 +133,6 @@ public class PlayerController : MonoBehaviour
             anim.SetTrigger("Torch");
         }
 
-        if (other.transform.CompareTag("Chest"))
-        {
-            CameraManager.Instance.OpenCamera("ChestCamera");
-            StartCoroutine("BackToReal");
-        }
         // Collecting Candys
         // if (other.transform.CompareTag("Candy"))
         // {
@@ -151,20 +140,16 @@ public class PlayerController : MonoBehaviour
         //     CandyCount++;
         //     candytext.text = CandyCount.ToString();
         //     Destroy(other.gameObject);
-        // } 
-        // // Collecting Elxyr
-        // if (other.transform.CompareTag("Elxyr"))
-        // {
-        //     Destroy(other.gameObject);
-        //     Elxyr++;
-        //     Elxyrtext.text = Elxyr.ToString();
-        // }        
+        // }       
     }
 
     IEnumerator BackToReal()
     {
         yield return new WaitForSeconds(3);
         CameraManager.Instance.OpenCamera("PlayerCamera");
+        Speed = 5;
+        RotationSpeed = 6;
+        JumpForce = 6;
     }
 
     IEnumerator StartGame()
@@ -172,9 +157,9 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(6);
         Speed = 5;
         RotationSpeed = 6;
+        JumpForce = 6;
     }
 
-    // Checking ground
     private void OnCollisionEnter(Collision other)
     {
         if (other.transform.CompareTag("Ground"))
@@ -192,17 +177,31 @@ public class PlayerController : MonoBehaviour
             }
             rb.AddForce(new(0, Jspeed));
         }
-
         // Grenade Type Enemys
         if (other.transform.CompareTag("Enemy"))
         {
-            anim.SetTrigger("Fear");
             Speed = 0f;
             TurnSpeed = 0f;
             RestartLevel.SetActive(true);
             _IsDead = true;
             walking.enabled = false;
             particlewalk.Stop(true);
+        }
+    }
+
+    private void OnCollisionStay(Collision other) 
+    {
+        //Chest Opening
+        if (other.transform.CompareTag("Chest") && Input.GetKeyDown(KeyCode.E))
+        {
+            other.transform.tag = "ChestOpened";
+            other.transform.GetComponent<Animator>().SetTrigger("Open");
+            Speed = 0;
+            RotationSpeed = 0;
+            JumpForce = 0;
+            CameraManager.Instance.OpenCamera("ChestCamera");
+            StartCoroutine("BackToReal");
+            GameObject chestobh = other.transform.gameObject;
         }
     }
     // Restarting
