@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float AttackRate;
     [SerializeField] public float AttackSecond;
     [SerializeField] public GameObject RestartLevel;
+    [SerializeField] public ParticleSystem particlewalk;
     private bool HasFlame;
     private bool _IsDead = false;
     public bool _isGround = true;
@@ -23,7 +24,6 @@ public class PlayerController : MonoBehaviour
     private float Vertical;
     private float NextAttackTime;
     public AudioSource walking;
-    public ParticleSystem particlewalk;
     private CinemachineVirtualCamera _cinemachineCamera;
     private CinemachineTransposer _transposer;
     public float TurnSpeed;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         _cinemachineCamera = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
         // _transposer = _cinemachineCamera.GetCinemachineComponent<CinemachineTransposer>();
-
+        particlewalk.Stop();
         // Awakening
         Speed = 0;
         RotationSpeed = 0;
@@ -70,11 +70,20 @@ public class PlayerController : MonoBehaviour
         var targetVector = new Vector3(inputVector.x, 0, inputVector.y);
         var movementVector = MoveTowardTarget(targetVector);
         RotateTowardMovementVector(movementVector);
+        if (movementVector.magnitude > 0)
+        {
+            particlewalk.Play();
+        }
+        else
+        {
+            particlewalk.Stop();
+        }
     }
     //TurnFace
     private void RotateTowardMovementVector(Vector3 movementVector)
     {
         if (movementVector.magnitude == 0) { return; }
+
         anim.SetFloat("Run", movementVector.magnitude);
         var rotation = Quaternion.LookRotation(movementVector);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, RotationSpeed);
@@ -200,9 +209,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision other) 
+    private void OnCollisionStay(Collision other)
     {
-            
+
         //Chest Opening
         if (other.transform.CompareTag("Chest") && Input.GetKeyDown(KeyCode.E))
         {
