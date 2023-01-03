@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float AttackRate;
     [SerializeField] public float AttackSecond;
     [SerializeField] public GameObject RestartLevel;
+    private bool HasFlame;
     private bool _IsDead = false;
     public bool _isGround = true;
     public GameObject endingmenu;
@@ -125,11 +126,13 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Wind"))
         {
             Fire.SetActive(false);
+            HasFlame = false;
         }
 
         if (other.CompareTag("Campfire"))
         {
             Fire.SetActive(true);
+            HasFlame = true;
             anim.SetTrigger("Torch");
         }
 
@@ -187,10 +190,19 @@ public class PlayerController : MonoBehaviour
             walking.enabled = false;
             particlewalk.Stop(true);
         }
+
+        if (other.transform.CompareTag("ChestBurnable") && HasFlame)
+        {
+            HasFlame = false;
+            Fire.SetActive(false);
+            other.transform.tag = "Chest";
+            other.gameObject.GetComponent<Burning>().ChestBurn();
+        }
     }
 
     private void OnCollisionStay(Collision other) 
     {
+            
         //Chest Opening
         if (other.transform.CompareTag("Chest") && Input.GetKeyDown(KeyCode.E))
         {
@@ -207,6 +219,6 @@ public class PlayerController : MonoBehaviour
     // Restarting
     public void Restart()
     {
-        SceneManager.LoadScene(1);
+        //SceneManager.LoadScene(1);
     }
 }

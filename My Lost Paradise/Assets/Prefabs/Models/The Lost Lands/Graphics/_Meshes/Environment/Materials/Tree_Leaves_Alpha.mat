@@ -8,20 +8,48 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Tree_Leaves_Alpha
-  m_Shader: {fileID: 14000, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 6ebe02d919f43dd47abd97304c0fcee7, type: 3}
   m_ValidKeywords:
   - GEOM_TYPE_LEAF
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_InvalidKeywords:
+  - _AD_CUTOUT_GEOMETRIC_COUNT_ONE
+  - _AD_CUTOUT_GEOMETRIC_TYPE_NONE
+  - _AD_CUTOUT_STANDARD_SOURCE_MAPS_MAPPING_TYPE_DEFAULT
+  - _AD_CUTOUT_STANDARD_SOURCE_NONE
+  - _AD_EDGE_ADDITIONAL_COLOR_NONE
+  - _AD_EDGE_BASE_SOURCE_NONE
+  - _AD_EDGE_UV_DISTORTION_SOURCE_DEFAULT
+  - _AD_GLOBAL_CONTROL_ID_NONE
+  - _AD_STATE_DISABLED
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
-  stringTagMap:
-    RenderType: TreeTransparentCutout
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AdvancedDissolveCutoutStandardMap1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AdvancedDissolveCutoutStandardMap2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AdvancedDissolveCutoutStandardMap3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AdvancedDissolveEdgeAdditionalColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AdvancedDissolveEdgeUVDistortionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -76,30 +104,133 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AO: 2.4
+    - _AdvancedDissolveCutoutGeometric1Height: 1
+    - _AdvancedDissolveCutoutGeometric1Radius: 1
+    - _AdvancedDissolveCutoutGeometric2Height: 1
+    - _AdvancedDissolveCutoutGeometric2Radius: 1
+    - _AdvancedDissolveCutoutGeometric3Height: 1
+    - _AdvancedDissolveCutoutGeometric3Radius: 1
+    - _AdvancedDissolveCutoutGeometric4Height: 1
+    - _AdvancedDissolveCutoutGeometric4Radius: 1
+    - _AdvancedDissolveCutoutGeometricInvert: 0
+    - _AdvancedDissolveCutoutGeometricNoise: 0.1
+    - _AdvancedDissolveCutoutGeometricXYZAxis: 0
+    - _AdvancedDissolveCutoutGeometricXYZRollout: 0
+    - _AdvancedDissolveCutoutGeometricXYZSpace: 0
+    - _AdvancedDissolveCutoutGeometricXYZStyle: 0
+    - _AdvancedDissolveCutoutStandardBaseInvert: 0
+    - _AdvancedDissolveCutoutStandardClip: 0.5
+    - _AdvancedDissolveCutoutStandardMap1Channel: 3
+    - _AdvancedDissolveCutoutStandardMap1Intensity: 1
+    - _AdvancedDissolveCutoutStandardMap1Invert: 0
+    - _AdvancedDissolveCutoutStandardMap2Channel: 3
+    - _AdvancedDissolveCutoutStandardMap2Intensity: 1
+    - _AdvancedDissolveCutoutStandardMap2Invert: 0
+    - _AdvancedDissolveCutoutStandardMap3Channel: 3
+    - _AdvancedDissolveCutoutStandardMap3Intensity: 1
+    - _AdvancedDissolveCutoutStandardMap3Invert: 0
+    - _AdvancedDissolveCutoutStandardMapsBlendType: 0
+    - _AdvancedDissolveCutoutStandardMapsScreenSpaceUVScale: 0
+    - _AdvancedDissolveCutoutStandardMapsTriplanarMappingSpace: 0
+    - _AdvancedDissolveEdgeAdditionalColorAlphaOffset: 0
+    - _AdvancedDissolveEdgeAdditionalColorClipInterpolation: 0
+    - _AdvancedDissolveEdgeAdditionalColorMapMipmap: 1
+    - _AdvancedDissolveEdgeAdditionalColorMapReverse: 0
+    - _AdvancedDissolveEdgeAdditionalColorPhaseOffset: 0
+    - _AdvancedDissolveEdgeAdditionalColorTransparency: 1
+    - _AdvancedDissolveEdgeBaseColorTransparency: 1
+    - _AdvancedDissolveEdgeBaseShape: 0
+    - _AdvancedDissolveEdgeBaseWidthGeometric: 0.1
+    - _AdvancedDissolveEdgeBaseWidthStandard: 0.1
+    - _AdvancedDissolveEdgeGIMetaPassMultiplier: 1
+    - _AdvancedDissolveEdgeUVDistortionStrength: 0
+    - _AdvancedDissolveKeywordCutoutGeometricCount: 0
+    - _AdvancedDissolveKeywordCutoutGeometricType: 0
+    - _AdvancedDissolveKeywordCutoutStandardSource: 0
+    - _AdvancedDissolveKeywordCutoutStandardSourceMapsMappingType: 0
+    - _AdvancedDissolveKeywordEdgeAdditionalColorSource: 0
+    - _AdvancedDissolveKeywordEdgeBaseSource: 0
+    - _AdvancedDissolveKeywordEdgeUVDistortionSource: 0
+    - _AdvancedDissolveKeywordGlobalControlID: 0
+    - _AdvancedDissolveKeywordState: 0
+    - _BaseLight: 0.35
+    - _BlendOp: 0
     - _BumpScale: 1
-    - _Cull: 0
-    - _Cutoff: 0.8
+    - _CameraFadingEnabled: 0
+    - _CameraFarFadeDistance: 2
+    - _CameraNearFadeDistance: 1
+    - _ColorMode: 0
+    - _Cull: 1
+    - _Cutoff: 0.42
     - _DetailNormalMapScale: 1
+    - _DistortionBlend: 0.5
+    - _DistortionEnabled: 0
+    - _DistortionStrength: 1
+    - _DistortionStrengthScaled: 0
     - _DstBlend: 0
+    - _EmissionEnabled: 0
+    - _FlipbookMode: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightingEnabled: 0
     - _Metallic: 0
     - _Mode: 0
+    - _Occlusion: 7.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShadowStrength: 1
     - _Shininess: 0.078125
     - _SmoothnessTextureChannel: 0
+    - _SoftParticlesEnabled: 0
+    - _SoftParticlesFarFadeDistance: 1
+    - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SquashAmount: 1
     - _SrcBlend: 1
+    - _TranslucencyViewDependency: 0.7
     - _UVSec: 0
     - _WindQuality: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.4401082, g: 0.5137255, b: 0.32941177, a: 1}
+    - _AdvancedDissolveBakedKeywords: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric1Normal: {r: 1, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric1Position: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric2Normal: {r: 1, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric2Position: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric3Normal: {r: 1, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric3Position: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric4Normal: {r: 1, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometric4Position: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutGeometricXYZPosition: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap1Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap1Scroll: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap1Tiling: {r: 1, g: 1, b: 1, a: 0}
+    - _AdvancedDissolveCutoutStandardMap2Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap2Scroll: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap2Tiling: {r: 1, g: 1, b: 1, a: 0}
+    - _AdvancedDissolveCutoutStandardMap3Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap3Scroll: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveCutoutStandardMap3Tiling: {r: 1, g: 1, b: 1, a: 0}
+    - _AdvancedDissolveEdgeAdditionalColor: {r: 1, g: 0, b: 0, a: 1}
+    - _AdvancedDissolveEdgeAdditionalColorIntensity: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveEdgeAdditionalColorMapOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveEdgeAdditionalColorMapScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveEdgeAdditionalColorMapTiling: {r: 1, g: 1, b: 1, a: 0}
+    - _AdvancedDissolveEdgeBaseColor: {r: 0, g: 1, b: 0, a: 1}
+    - _AdvancedDissolveEdgeBaseColorIntensity: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveEdgeUVDistortionMapOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveEdgeUVDistortionMapScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _AdvancedDissolveEdgeUVDistortionMapTiling: {r: 1, g: 1, b: 1, a: 0}
+    - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
+    - _Color: {r: 0.4727557, g: 0.5566038, b: 0.34919012, a: 0.5686275}
+    - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
+    - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0}
+    - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+    - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _TranslucencyColor: {r: 0.73, g: 0.85, b: 0.41, a: 1}
     - _TreeInstanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _TreeInstanceScale: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
