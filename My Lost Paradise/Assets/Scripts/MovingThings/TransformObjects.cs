@@ -8,6 +8,7 @@ public class TransformObjects : MonoBehaviour
     [SerializeField] GameObject Turn1;
     private Rigidbody rb;
     private Rigidbody rbT;
+    public float downSpeed;
 
     public float TurnSpeed;
 
@@ -20,7 +21,8 @@ public class TransformObjects : MonoBehaviour
     {
         TurnSpeed = (float)(rb.angularVelocity.y) * 0.1f;
         UpDown.transform.position += new Vector3(0, transform.position.y * TurnSpeed * 0.1f, 0);
-        //UpDown.transform.position = new Vector3(UpDown.transform.position.x, Mathf.Clamp(UpDown.transform.position.y, 28, 31), UpDown.transform.position.z);
+        //UpDown.transform.position -= new Vector3(0, transform.position.y * downSpeed * Time.deltaTime, 0);
+        UpDown.transform.position = new Vector3(UpDown.transform.position.x, Mathf.Clamp(UpDown.transform.position.y, 37, 46), UpDown.transform.position.z);
 
         Turn1.transform.Rotate(new Vector3(0, transform.position.y * TurnSpeed * 5f, 0));
         // float clampedR = Mathf.Clamp(Turn1.transform.rotation.y, 0f ,180f);
