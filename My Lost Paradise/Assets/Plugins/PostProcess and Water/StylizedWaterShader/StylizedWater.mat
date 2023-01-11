@@ -80,10 +80,10 @@ Material:
     - _WavesIntensity: 1.16
     - _WavesSpeed: 0.58
     m_Colors:
-    - _DepthGradient1: {r: 0.034709856, g: 0.11320752, b: 0.1025033, a: 1}
+    - _DepthGradient1: {r: 0.15040937, g: 0.18867922, b: 0.18297231, a: 1}
     - _DepthGradient2: {r: 0.05446778, g: 0.2054987, b: 0.2264151, a: 1}
     - _DepthGradient3: {r: 0.017409164, g: 0.04984338, b: 0.16911763, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FresnelColor: {r: 0.50271446, g: 0.7357705, b: 0.745283, a: 1}
+    - _FresnelColor: {r: 0.20372018, g: 0.39001653, b: 0.3962264, a: 1}
     - _ShadowColor: {r: 0.009191178, g: 0.033871744, b: 0.125, a: 1}
   m_BuildTextureStacks: []

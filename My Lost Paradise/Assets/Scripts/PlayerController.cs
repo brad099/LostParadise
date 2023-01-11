@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public GameObject RestartLevel;
     [SerializeField] public ParticleSystem particlewalk;
     private bool HasFlame;
+    public bool _isJumped = true;
+    public float JumpCdTimer = 1f;
     private bool _IsDead = false;
     public bool _isGround = true;
     public GameObject endingmenu;
@@ -34,10 +36,12 @@ public class PlayerController : MonoBehaviour
     Vector3 distance;
     public int Elxyr = 0;
     Vector3 direction;
+    private bool FinishEnabled = false;
 
 
     void Start()
     {
+        
         transform.position = ESDataManager.Instance.GetLastCheckPoint();
         particlewalk = GetComponentInChildren<ParticleSystem>();
         walking = GetComponent<AudioSource>();
@@ -54,11 +58,20 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+        GameObject[] chests = GameObject.FindGameObjectsWithTag("ChestOpened");
+
+        if (chests.Length == 3)
+        {
+            Debug.Log("You now can finish the game");
+            FinishEnabled = true;
+        }
         // Jumping
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _isJumped == true)
         {
             rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             anim.SetTrigger("Jump");
+            StartCoroutine("JumpCd");
+            _isJumped = false;
         }
 
     }
@@ -103,9 +116,10 @@ public class PlayerController : MonoBehaviour
     // Finish Line
     public void OnTriggerStay(Collider other)
     {
-        if (other.transform.CompareTag("Finish"))
+        if (other.transform.CompareTag("Finish") && FinishEnabled)
         {
             //Rotation on Finish
+            other.transform.GetChild(0).gameObject.SetActive(true);
             transform.DOLocalRotate(new Vector3(0, -220, 0), 0.3f);
             anim.SetTrigger("Ending");
             // _transposer.m_BindingMode = CinemachineTransposer.BindingMode.LockToTargetOnAssign;
@@ -171,15 +185,14 @@ public class PlayerController : MonoBehaviour
         RotationSpeed = 6;
         JumpForce = 6;
     }
+    IEnumerator JumpCd()
+    {
+        yield return new WaitForSeconds(JumpCdTimer);
+        _isJumped = true;
+    }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.transform.CompareTag("Ground"))
-        {
-            _isGround = true;
-            Jspeed = 0;
-        }
-
         if (other.transform.CompareTag("Tramp"))
         {
             Jspeed += 200;
@@ -188,16 +201,6 @@ public class PlayerController : MonoBehaviour
                 Jspeed = 700;
             }
             rb.AddForce(new(0, Jspeed));
-        }
-        // Grenade Type Enemys
-        if (other.transform.CompareTag("Enemy"))
-        {
-            Speed = 0f;
-            TurnSpeed = 0f;
-            RestartLevel.SetActive(true);
-            _IsDead = true;
-            walking.enabled = false;
-            particlewalk.Stop(true);
         }
 
         if (other.transform.CompareTag("ChestBurnable") && HasFlame)
@@ -217,10 +220,12 @@ public class PlayerController : MonoBehaviour
         {
             other.transform.tag = "ChestOpened";
             other.transform.GetComponent<Animator>().SetTrigger("Open");
+            other.transform.GetChild(0).gameObject.SetActive(true);
+            Destroy(other.transform.GetChild(0).gameObject,2);
             Speed = 0;
             RotationSpeed = 0;
             JumpForce = 0;
-            CameraManager.Instance.OpenCamera("ChestCamera");
+            CameraManager.Instance.OpenCamera("ChestCamera1");
             StartCoroutine("BackToReal");
             GameObject chestobh = other.transform.gameObject;
         }
