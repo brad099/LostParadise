@@ -195,6 +195,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.transform.CompareTag("Tramp"))
         {
+            other.transform.DOShakeScale(1,0.3f);
             Jspeed += 200;
             if (Jspeed >= 700)
             {
@@ -226,6 +227,32 @@ public class PlayerController : MonoBehaviour
             RotationSpeed = 0;
             JumpForce = 0;
             CameraManager.Instance.OpenCamera("ChestCamera1");
+            StartCoroutine("BackToReal");
+            GameObject chestobh = other.transform.gameObject;
+        }
+        if (other.transform.CompareTag("Chest2") && Input.GetKeyDown(KeyCode.E))
+        {
+            other.transform.tag = "ChestOpened";
+            other.transform.GetComponent<Animator>().SetTrigger("Open");
+            other.transform.GetChild(0).gameObject.SetActive(true);
+            Destroy(other.transform.GetChild(0).gameObject,2);
+            Speed = 0;
+            RotationSpeed = 0;
+            JumpForce = 0;
+            CameraManager.Instance.OpenCamera("ChestCamera2");
+            StartCoroutine("BackToReal");
+            GameObject chestobh = other.transform.gameObject;
+        }
+        if (other.transform.CompareTag("Chest3") && Input.GetKeyDown(KeyCode.E))
+        {
+            other.transform.tag = "ChestOpened";
+            other.transform.GetComponent<Animator>().SetTrigger("Open");
+            other.transform.GetChild(0).gameObject.SetActive(true);
+            Destroy(other.transform.GetChild(0).gameObject,2);
+            Speed = 0;
+            RotationSpeed = 0;
+            JumpForce = 0;
+            CameraManager.Instance.OpenCamera("ChestCamera3");
             StartCoroutine("BackToReal");
             GameObject chestobh = other.transform.gameObject;
         }
