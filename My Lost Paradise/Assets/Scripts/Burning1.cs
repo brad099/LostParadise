@@ -14,7 +14,7 @@ public class Burning1 : MonoBehaviour
     {
         if (IsBurned)
         {
-        transform.transform.tag = "Chest";
+        transform.transform.tag = "Chest3";
         part.Play();
         part1.Play();
         part2.Play();

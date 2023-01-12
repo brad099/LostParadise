@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float AttackSecond;
     [SerializeField] public GameObject RestartLevel;
     [SerializeField] public ParticleSystem particlewalk;
+    [SerializeField] public ParticleSystem jumpparticle;
     private bool HasFlame;
     public bool _isJumped = true;
     public float JumpCdTimer = 1f;
@@ -43,7 +44,6 @@ public class PlayerController : MonoBehaviour
     {
         
         transform.position = ESDataManager.Instance.GetLastCheckPoint();
-        particlewalk = GetComponentInChildren<ParticleSystem>();
         walking = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
         // Jumping
         if (Input.GetKeyDown(KeyCode.Space) && _isJumped == true)
         {
+            jumpparticle.Play();
             rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             anim.SetTrigger("Jump");
             StartCoroutine("JumpCd");
