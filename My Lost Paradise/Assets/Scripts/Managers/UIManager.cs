@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject FailPanel;
     [SerializeField] GameObject FailUIPanel;
 
-
+    private bool opened;
     private void Awake()
     {
         if (instance == null)
@@ -53,7 +53,25 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            opened = true;
+            ShopPanel.SetActive(true);
+            Time.timeScale = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            opened = false;
+            ShopPanel.SetActive(false);
+            Time.timeScale = 1;
+        }
+        
 
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     //////// General Panel ///////
@@ -74,7 +92,7 @@ public class UIManager : MonoBehaviour
     public void CloseHomePanel()
     {
         HomePanel.SetActive(false);
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
     }
 
 

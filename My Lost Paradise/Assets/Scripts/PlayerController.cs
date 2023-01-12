@@ -38,19 +38,20 @@ public class PlayerController : MonoBehaviour
     public int Elxyr = 0;
     Vector3 direction;
     private bool FinishEnabled = false;
+    AudioSource walksound;
 
 
     void Start()
     {
-        
+        SoundManager.instance.Play("Background", true);
+        walksound = GetComponent<AudioSource>();
         transform.position = ESDataManager.Instance.GetLastCheckPoint();
-        walking = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         _cinemachineCamera = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
         // _transposer = _cinemachineCamera.GetCinemachineComponent<CinemachineTransposer>();
-        particlewalk.Stop();
         // Awakening
+        particlewalk.Stop();
         Speed = 0;
         RotationSpeed = 0;
         JumpForce = 0;
@@ -62,8 +63,11 @@ public class PlayerController : MonoBehaviour
 
         if (chests.Length == 3)
         {
-            Debug.Log("You now can finish the game");
             FinishEnabled = true;
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            anim.SetTrigger("Dance");
         }
         // Jumping
         if (Input.GetKeyDown(KeyCode.Space) && _isJumped == true)
@@ -72,6 +76,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             anim.SetTrigger("Jump");
             StartCoroutine("JumpCd");
+            SoundManager.instance.Play("Jump", true);
             _isJumped = false;
         }
 
@@ -87,10 +92,12 @@ public class PlayerController : MonoBehaviour
         if (movementVector.magnitude > 0)
         {
             particlewalk.Play();
+            walksound.enabled = true;
         }
         else
         {
             particlewalk.Stop();
+            walksound.enabled = false;
         }
     }
     //TurnFace
@@ -114,27 +121,21 @@ public class PlayerController : MonoBehaviour
 
 
 
-    // Finish Line
-    public void OnTriggerStay(Collider other)
+    // Checking enemy
+    public void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("Finish") && FinishEnabled)
         {
             //Rotation on Finish
             other.transform.GetChild(0).gameObject.SetActive(true);
-            transform.DOLocalRotate(new Vector3(0, -220, 0), 0.3f);
+            transform.DOLocalRotate(new Vector3(0, 200, 0), 0.3f);
+            SoundManager.instance.Play("won", true);
             anim.SetTrigger("Ending");
-            // _transposer.m_BindingMode = CinemachineTransposer.BindingMode.LockToTargetOnAssign;
-            // _transposer.m_FollowOffset = new Vector3(10f,7f,1.5f);
-            Speed = 0f;
-            TurnSpeed = 0f;
-            walking.enabled = false;
-            particlewalk.Stop(true);
             endingmenu.SetActive(true);
+            Speed = 0;
+            RotationSpeed = 0;
+            JumpForce = 0;
         }
-    }
-    // Checking enemy
-    public void OnTriggerEnter(Collider other)
-    {
         if (other.transform.CompareTag("Enemy"))
         {
             anim.SetTrigger("Fear");
@@ -155,19 +156,25 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Campfire"))
         {
-            Fire.SetActive(true);
-            HasFlame = true;
-            anim.SetTrigger("Torch");
+            if (!Fire.gameObject.activeSelf)
+            {
+                Fire.SetActive(true);
+                HasFlame = true;
+                anim.SetTrigger("Torch");
+                Speed = 0;
+                RotationSpeed = 0;
+                JumpForce = 0;
+                StartCoroutine("FireTake");
+            }
         }
+    }
 
-        // Collecting Candys
-        // if (other.transform.CompareTag("Candy"))
-        // {
-
-        //     CandyCount++;
-        //     candytext.text = CandyCount.ToString();
-        //     Destroy(other.gameObject);
-        // }       
+    IEnumerator FireTake()
+    {
+        yield return new WaitForSeconds(2);
+        Speed = 5;
+        RotationSpeed = 6;
+        JumpForce = 6;
     }
 
     IEnumerator BackToReal()
@@ -196,7 +203,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.transform.CompareTag("Tramp"))
         {
-            other.transform.DOShakeScale(1,0.3f);
+            other.transform.DOShakeScale(1, 0.3f);
             Jspeed += 200;
             if (Jspeed >= 700)
             {
@@ -223,7 +230,7 @@ public class PlayerController : MonoBehaviour
             other.transform.tag = "ChestOpened";
             other.transform.GetComponent<Animator>().SetTrigger("Open");
             other.transform.GetChild(0).gameObject.SetActive(true);
-            Destroy(other.transform.GetChild(0).gameObject,2);
+            Destroy(other.transform.GetChild(0).gameObject, 2);
             Speed = 0;
             RotationSpeed = 0;
             JumpForce = 0;
@@ -236,7 +243,7 @@ public class PlayerController : MonoBehaviour
             other.transform.tag = "ChestOpened";
             other.transform.GetComponent<Animator>().SetTrigger("Open");
             other.transform.GetChild(0).gameObject.SetActive(true);
-            Destroy(other.transform.GetChild(0).gameObject,2);
+            Destroy(other.transform.GetChild(0).gameObject, 2);
             Speed = 0;
             RotationSpeed = 0;
             JumpForce = 0;
@@ -249,7 +256,7 @@ public class PlayerController : MonoBehaviour
             other.transform.tag = "ChestOpened";
             other.transform.GetComponent<Animator>().SetTrigger("Open");
             other.transform.GetChild(0).gameObject.SetActive(true);
-            Destroy(other.transform.GetChild(0).gameObject,2);
+            Destroy(other.transform.GetChild(0).gameObject, 2);
             Speed = 0;
             RotationSpeed = 0;
             JumpForce = 0;

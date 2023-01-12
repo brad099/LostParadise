@@ -25,6 +25,7 @@ public class Dialogue : MonoBehaviour
             {
                 DialoguePanel.SetActive(true); 
                 StartCoroutine(Typing());
+                SoundManager.instance.Play("Mumble",true);
             }
         }
         if (DialogueText.text == dialogue[index])
@@ -58,6 +59,7 @@ public class Dialogue : MonoBehaviour
 
     IEnumerator Typing()
     {
+        SoundManager.instance.Play("Mumble2",true);
         foreach (char letter in dialogue[index].ToCharArray())
         {
             DialogueText.text  += letter; 
@@ -78,6 +80,7 @@ public class Dialogue : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            SoundManager.instance.Play("Mumble3",true);
             PlayerClose = false;
             ZeroText();
             talkBanner.SetActive(false);
