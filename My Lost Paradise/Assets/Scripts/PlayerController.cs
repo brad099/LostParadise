@@ -12,45 +12,39 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float JumpForce;
     [SerializeField] Transform FireTransform;
     [SerializeField] GameObject Fire;
-    [SerializeField] public float AttackRate;
-    [SerializeField] public float AttackSecond;
-    [SerializeField] public GameObject RestartLevel;
     [SerializeField] public ParticleSystem particlewalk;
     [SerializeField] public ParticleSystem jumpparticle;
+    [SerializeField]public float JumpCdTimer = 1f;
+    [SerializeField]public GameObject endingmenu;
     private bool HasFlame;
-    public bool _isJumped = true;
-    public float JumpCdTimer = 1f;
-    private bool _IsDead = false;
-    public bool _isGround = true;
-    public GameObject endingmenu;
+    private bool _isJumped = true;
+    private bool FinishEnabled = false;
     private float Horizontal;
     private float Vertical;
     private float NextAttackTime;
-    public AudioSource walking;
     private CinemachineVirtualCamera _cinemachineCamera;
     private CinemachineTransposer _transposer;
-    public float TurnSpeed;
+    public AudioSource walking;
     public float Jspeed = 300f;
     Vector3 movement;
     Rigidbody rb;
     Animator anim;
     Vector3 distance;
-    public int Elxyr = 0;
     Vector3 direction;
-    private bool FinishEnabled = false;
     AudioSource walksound;
 
 
     void Start()
     {
+        //Get components at the start
         SoundManager.instance.Play("Background", true);
         walksound = GetComponent<AudioSource>();
         transform.position = ESDataManager.Instance.GetLastCheckPoint();
         rb = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         _cinemachineCamera = GameObject.FindObjectOfType<CinemachineVirtualCamera>();
-        // _transposer = _cinemachineCamera.GetCinemachineComponent<CinemachineTransposer>();
-        // Awakening
+
+        // Awakening on the Start
         particlewalk.Stop();
         Speed = 0;
         RotationSpeed = 0;
@@ -59,17 +53,19 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+        // Check chest list if aviable
         GameObject[] chests = GameObject.FindGameObjectsWithTag("ChestOpened");
 
         if (chests.Length == 3)
         {
             FinishEnabled = true;
         }
+        // Dance with Uugas
         if (Input.GetKeyDown(KeyCode.K))
         {
             anim.SetTrigger("Dance");
         }
-        // Jumping
+        // Jumping & Jump triggers
         if (Input.GetKeyDown(KeyCode.Space) && _isJumped == true)
         {
             jumpparticle.Play();
@@ -100,6 +96,7 @@ public class PlayerController : MonoBehaviour
             walksound.enabled = false;
         }
     }
+
     //TurnFace
     private void RotateTowardMovementVector(Vector3 movementVector)
     {
@@ -120,13 +117,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-    // Checking enemy
     public void OnTriggerEnter(Collider other)
     {
+        //Particle and Finish
         if (other.transform.CompareTag("Finish") && FinishEnabled)
         {
-            //Rotation on Finish
             other.transform.GetChild(0).gameObject.SetActive(true);
             transform.DOLocalRotate(new Vector3(0, 200, 0), 0.3f);
             SoundManager.instance.Play("won", true);
@@ -136,24 +131,13 @@ public class PlayerController : MonoBehaviour
             RotationSpeed = 0;
             JumpForce = 0;
         }
-        if (other.transform.CompareTag("Enemy"))
-        {
-            anim.SetTrigger("Fear");
-            Speed = 0f;
-            TurnSpeed = 0f;
-            RestartLevel.SetActive(true);
-            _IsDead = true;
-            walking.enabled = false;
-            particlewalk.Stop(true);
-            rb.isKinematic = true;
-        }
-
+        //Debuff fire
         if (other.CompareTag("Wind"))
         {
             Fire.SetActive(false);
             HasFlame = false;
         }
-
+        //Taking fire
         if (other.CompareTag("Campfire"))
         {
             if (!Fire.gameObject.activeSelf)
@@ -168,7 +152,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    //Wait for taking flame
     IEnumerator FireTake()
     {
         yield return new WaitForSeconds(2);
@@ -176,7 +160,7 @@ public class PlayerController : MonoBehaviour
         RotationSpeed = 6;
         JumpForce = 6;
     }
-
+    //Chest return to player
     IEnumerator BackToReal()
     {
         yield return new WaitForSeconds(3);
@@ -185,7 +169,7 @@ public class PlayerController : MonoBehaviour
         RotationSpeed = 6;
         JumpForce = 6;
     }
-
+    // Wait for clearly stand up
     IEnumerator StartGame()
     {
         yield return new WaitForSeconds(6);
@@ -193,25 +177,34 @@ public class PlayerController : MonoBehaviour
         RotationSpeed = 6;
         JumpForce = 6;
     }
+    // Wait for Next Jump
     IEnumerator JumpCd()
     {
         yield return new WaitForSeconds(JumpCdTimer);
         _isJumped = true;
     }
 
+    IEnumerator JumpierCd()
+    {
+        yield return new WaitForSeconds(3f);
+        Jspeed = 0f;
+    }
+
     private void OnCollisionEnter(Collision other)
     {
+        //Jumpier 
         if (other.transform.CompareTag("Tramp"))
         {
             other.transform.DOShakeScale(1, 0.3f);
             Jspeed += 200;
-            if (Jspeed >= 700)
+            if (Jspeed >= 600)
             {
-                Jspeed = 700;
+                Jspeed = 600;
+                StartCoroutine("JumpierCd");
             }
             rb.AddForce(new(0, Jspeed));
         }
-
+        //Burn the Chest
         if (other.transform.CompareTag("ChestBurnable") && HasFlame)
         {
             HasFlame = false;
@@ -224,7 +217,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionStay(Collision other)
     {
 
-        //Chest Opening
+        //Chest 1
         if (other.transform.CompareTag("Chest") && Input.GetKeyDown(KeyCode.E))
         {
             other.transform.tag = "ChestOpened";
@@ -238,6 +231,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine("BackToReal");
             GameObject chestobh = other.transform.gameObject;
         }
+        //Chest 2
         if (other.transform.CompareTag("Chest2") && Input.GetKeyDown(KeyCode.E))
         {
             other.transform.tag = "ChestOpened";
@@ -251,6 +245,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine("BackToReal");
             GameObject chestobh = other.transform.gameObject;
         }
+        //Chest 3
         if (other.transform.CompareTag("Chest3") && Input.GetKeyDown(KeyCode.E))
         {
             other.transform.tag = "ChestOpened";
@@ -264,10 +259,5 @@ public class PlayerController : MonoBehaviour
             StartCoroutine("BackToReal");
             GameObject chestobh = other.transform.gameObject;
         }
-    }
-    // Restarting
-    public void Restart()
-    {
-        //SceneManager.LoadScene(1);
     }
 }
