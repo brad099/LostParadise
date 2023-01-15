@@ -5,13 +5,19 @@ using CASP.SoundManager;
 
 public class SoundManager : MonoBehaviour
 {
+
+    [SerializeField] public Transform inGameSounds;
     public Sound[] sounds;
     public static SoundManager instance;
 
-    private void Awake() {
-        if (instance == null) {
+    private void Awake()
+    {
+        if (instance == null)
+        {
             instance = this;
-        } else {
+        }
+        else
+        {
             Destroy(gameObject);
             return;
         }
@@ -26,32 +32,52 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    private void Start() 
+    private void Start()
     {
         Play("Background", true);
-        Play("Skate",true);
+        Play("Skate", true);
     }
 
-    public void Play(string name, bool loopPlay) {
+    public void Play(string name, bool loopPlay)
+    {
         Sound s = System.Array.Find(sounds, sound => sound.Name == name);
-        if (s == null) {
+        if (s == null)
+        {
             return;
         }
 
-        if (!loopPlay) {
+        if (!loopPlay)
+        {
             // For completely play all sounds without cutting some last of sounds
             s.source.PlayOneShot(s.Clip);
-        } else {
+        }
+        else
+        {
             s.source.Play();
         }
     }
 
-    public void Stop(string name) {
+    public void Stop(string name)
+    {
         Sound s = System.Array.Find(sounds, sound => sound.Name == name);
-        if (s == null) {
+        if (s == null)
+        {
             return;
         }
         s.source.Stop();
+    }
+
+    public void ChangeVolume(float volume)
+    {
+        foreach (var sound in sounds)
+        {
+            sound.source.volume = volume;
+        }
+        
+        foreach (Transform item in inGameSounds)
+        {
+            item.GetComponent<AudioSource>().volume = volume;
+        }
     }
 
 }

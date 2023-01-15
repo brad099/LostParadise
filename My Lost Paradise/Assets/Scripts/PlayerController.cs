@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //Get components at the start
-        SoundManager.instance.Play("Background", true);
         walksound = GetComponent<AudioSource>();
         transform.position = ESDataManager.Instance.GetLastCheckPoint();
         rb = GetComponent<Rigidbody>();

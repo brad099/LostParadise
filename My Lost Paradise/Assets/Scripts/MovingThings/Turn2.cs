@@ -17,7 +17,7 @@ public class Turn2 : MonoBehaviour
 
     void Update()
     {
-        TurnSpeed = (float)(rb.angularVelocity.y) * 0.1f;
+        TurnSpeed = (float)(rb.angularVelocity.y) * 0.2f;
         UpDown.transform.position += new Vector3(0, transform.position.y * TurnSpeed * 0.1f, 0);
         UpDown.transform.position -= new Vector3(0, transform.position.y * downSpeed * Time.deltaTime, 0);
         UpDown.transform.position = new Vector3(UpDown.transform.position.x, Mathf.Clamp(UpDown.transform.position.y, 34f, 41f), UpDown.transform.position.z);

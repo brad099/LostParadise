@@ -4,39 +4,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-
-    [Header("General Panel")]
-    [SerializeField] GameObject GeneralPanel;
 
     [Header("Home Panel")]
     [SerializeField] GameObject HomePanel;
 
     [Header("Settings Panel")]
     [SerializeField] GameObject SettingsPanel;
-    [SerializeField] GameObject SettingsUIPanel;
-
-    [Header("Prize Panel")]
-    [SerializeField] GameObject PrizePanel;
-    [SerializeField] GameObject PrizeUIPanel;
+    [SerializeField] GameObject SettingsHomePanel;
 
 
-    [Header("Shop Panel")]
-    [SerializeField] GameObject ShopPanel;
-    [SerializeField] GameObject ShopUIPanel;
+    [Header("Pause Panel")]
+    [SerializeField] GameObject PausePanel;
+    [SerializeField] Slider SoundSlider;
+    private bool PMenu;
+    [SerializeField] GameObject BackgroundMusic;
+    private bool BMusic;
 
-    [Header("Win Panel")]
-    [SerializeField] GameObject WinPanel;
-    [SerializeField] TMP_Text WinCoinTxt;
-    [SerializeField] GameObject WinUIPanel;
 
-    [Header("Fail Panel")]
-    [SerializeField] GameObject FailPanel;
-    [SerializeField] GameObject FailUIPanel;
-
-    private bool opened;
     private void Awake()
     {
         if (instance == null)
@@ -48,6 +36,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        SoundManager.instance.Play("Background", true);
+        SoundSlider.onValueChanged.AddListener(SoundManager.instance.ChangeVolume);
         OpenHomePanel();
         Time.timeScale = 0;
     }
@@ -55,33 +45,44 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            opened = true;
-            ShopPanel.SetActive(true);
-            Time.timeScale = 0;
+            PMenu = !PMenu;
+            PausePanel.SetActive(PMenu);
+            if (PMenu)
+            {
+            Time.timeScale = 0;    
+            }
+            else
+            {
+            Time.timeScale = 1;
+            }
         }
+
         if (Input.GetKeyDown(KeyCode.U))
         {
-            opened = false;
-            ShopPanel.SetActive(false);
+            SettingsPanel.SetActive(false);
             Time.timeScale = 1;
         }
-        
-
     }
+
+    ////    Slider Volume   ////
+
+    public void BackMusic()
+    {
+        BMusic = !BMusic;
+        if (BMusic)
+        {     
+            BackgroundMusic.SetActive(false);
+        }
+        else
+        {
+            BackgroundMusic.SetActive(true);
+        }
+    }
+
 
     public void Quit()
     {
         Application.Quit();
-    }
-
-    //////// General Panel ///////
-    public void OpenGeneralPanel()
-    {
-        GeneralPanel.SetActive(true);
-    }
-    public void CloseGeneralPanel()
-    {
-        GeneralPanel.SetActive(false);
     }
 
     //////// Home Panel ///////
@@ -91,72 +92,47 @@ public class UIManager : MonoBehaviour
     }
     public void CloseHomePanel()
     {
+        // Starting Game
         HomePanel.SetActive(false);
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
     }
 
 
     //////// Settings Panel ///////
     public void OpenSettingsPanel()
     {
+        HomePanel.SetActive(false);
+        PausePanel.SetActive(false);
         SettingsPanel.SetActive(true);
-        SettingsUIPanel.SetActive(true);
-
     }
     public void CloseSettingsPanel()
     {
         SettingsPanel.SetActive(false);
-        SettingsUIPanel.SetActive(false);
+        PausePanel.SetActive(true);
     }
 
-
-    //////// Win Panel ///////
-    public void OpenWinPanel()
+    // Settings Home Version
+    public void OpenSettingsHomePanel()
     {
-        WinPanel.SetActive(true);
+        HomePanel.SetActive(false);
+        PausePanel.SetActive(false);
+        SettingsHomePanel.SetActive(true);
     }
-    public void CloseWinPanel()
+    public void CloseSettingsHomePanel()
     {
-        WinPanel.SetActive(false);
-    }
-
-
-
-    //////// Fail Panel ///////
-    public void OpenFailPanel()
-    {
-        FailPanel.SetActive(true);
-    }
-    public void CloseFailPanel()
-    {
-        FailPanel.SetActive(false);
+        SettingsHomePanel.SetActive(false);
+        HomePanel.SetActive(true);
     }
 
-
-    //////// Prize Panel ///////
-    public void OpenPrizePanel()
+    //Pause Panel
+    public void OpenPausePanel()
     {
-        PrizePanel.SetActive(true);
-        PrizeUIPanel.SetActive(true);
-    }
-    public void ClosePrizePanel()
-    {
-        PrizePanel.SetActive(false);
-        PrizeUIPanel.SetActive(false);
+        SettingsPanel.SetActive(true);
     }
 
-
-    //Shop Panel
-    public void OpenShopPanel()
+    public void ClosePausePanel()
     {
-        ShopPanel.SetActive(true);
-        ShopUIPanel.SetActive(true);
-    }
-
-    public void CloseShopPanel()
-    {
-
-        ShopPanel.SetActive(false);
-        ShopUIPanel.SetActive(false);
+        PausePanel.SetActive(false);
+        Time.timeScale = 1;
     }
 }
